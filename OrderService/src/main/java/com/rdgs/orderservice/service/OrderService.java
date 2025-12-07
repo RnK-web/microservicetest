@@ -10,8 +10,13 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.net.URI;
+
 @Service
 public class OrderService {
+
+    @Value("${app.url.inventory}")
+    private String inventoryUrl;
 
     private final OrderRepository orderRepository;
     private final RestClient restClient = RestClient.create();
@@ -22,12 +27,11 @@ public class OrderService {
 
 
     public OrderCreationResponse createOrder(OrderCreationRequest order) {
-        // TODO : Call inventory service to look at stock.
-        //var isInStock = restClient.get().uri(inventoryUrl + "api/v1/inventory?id="+order.productId()+"&quantity="+order.quantity())
-        //        .accept(MediaType.APPLICATION_JSON).retrieve().body(Boolean.class);
-        //if (isInStock == null || !isInStock) {
-        //    return null;
-        //}
+        var isInStock = restClient.get().uri(inventoryUrl + "api/v1/inventory?id="+order.productId()+"&quantity="+order.quantity())
+                .accept(MediaType.APPLICATION_JSON).retrieve().body(Boolean.class);
+        if (isInStock == null || !isInStock) {
+            return null;
+        }
         var newOrder = new Order();
         newOrder.setProductId(order.productId());
         newOrder.setQuantity(order.quantity());

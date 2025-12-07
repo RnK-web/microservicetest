@@ -19,6 +19,10 @@ public class OrderController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderCreationResponse createOrder(@RequestBody OrderCreationRequest order) {
-        return orderService.createOrder(order);
+        var resp = orderService.createOrder(order);
+        if (resp == null) {
+            throw new RuntimeException("Order creation failed, not enough stock !");
+        }
+        return resp;
     }
 }

@@ -6,6 +6,6 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: inventory-service
+      MYSQL_DATABASE: order-service
     volumes:
       - ./data:/data/db

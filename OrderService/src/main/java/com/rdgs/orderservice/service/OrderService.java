@@ -2,35 +2,27 @@ package com.rdgs.orderservice.service;
 
 import com.rdgs.orderservice.dto.OrderCreationRequest;
 import com.rdgs.orderservice.dto.OrderCreationResponse;
+import com.rdgs.orderservice.exception.StockNotAvailableException;
 import com.rdgs.orderservice.model.Order;
 import com.rdgs.orderservice.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
+import com.rdgs.orderservice.service.feignclient.FeignInventoryClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
-
-import java.net.URI;
 
 @Service
 public class OrderService {
 
-    @Value("${app.url.inventory}")
-    private String inventoryUrl;
-
     private final OrderRepository orderRepository;
-    private final RestClient restClient = RestClient.create();
+    private final FeignInventoryClient feignInventoryClient;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, FeignInventoryClient feignInventoryClient) {
         this.orderRepository = orderRepository;
+        this.feignInventoryClient = feignInventoryClient;
     }
 
-
-    public OrderCreationResponse createOrder(OrderCreationRequest order) {
-        var isInStock = restClient.get().uri(inventoryUrl + "api/v1/inventory?id="+order.productId()+"&quantity="+order.quantity())
-                .accept(MediaType.APPLICATION_JSON).retrieve().body(Boolean.class);
-        if (isInStock == null || !isInStock) {
-            return null;
+    public OrderCreationResponse createOrder(OrderCreationRequest order) throws StockNotAvailableException {
+        var isInStock = feignInventoryClient.isInStock(order.productId(), order.quantity());
+        if (!isInStock) {
+            throw new StockNotAvailableException("Order creation failed, not enough stock !");
         }
         var newOrder = new Order();
         newOrder.setProductId(order.productId());

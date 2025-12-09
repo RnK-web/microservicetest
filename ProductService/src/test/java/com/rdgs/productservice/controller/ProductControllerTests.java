@@ -1,6 +1,5 @@
 package com.rdgs.productservice.controller;
 
-import com.rdgs.productservice.dto.ProductCreationRequest;
 import com.rdgs.productservice.model.Product;
 import com.rdgs.productservice.repository.ProductRepository;
 import org.junit.jupiter.api.*;
@@ -11,7 +10,6 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.mongodb.MongoDBContainer;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -40,11 +38,6 @@ public class ProductControllerTests {
     @BeforeAll
     static void beforeAll() {
         mongo.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        mongo.stop();
     }
 
     @BeforeEach

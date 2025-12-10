@@ -1,6 +1,6 @@
 name: Workflow for inventory service
 env:
-  SERVICE: inventory-service
+  SERVICE: InventoryService
 on:
   push:
     branches: [ "main" ]

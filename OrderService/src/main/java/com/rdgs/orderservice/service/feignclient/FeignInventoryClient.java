@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(value = "inventory", url = "${app.url.inventory}")
+@FeignClient("${inventory.service.name}")
 public interface FeignInventoryClient {
 
-    @RequestMapping(method = RequestMethod.GET, value = "api/v1/inventory")
+    @RequestMapping(method = RequestMethod.GET, value = "/api/v1/inventory")
     boolean isInStock(@RequestParam("id") String id, @RequestParam("quantity") long quantity);
 
 }

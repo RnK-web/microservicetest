@@ -1,16 +1,16 @@
 name: Workflow for Api Gateway
 env:
-  SERVICE: ApiGateway
+  SERVICE: api-gateway
 on:
   push:
     branches: [ "main" ]
     paths:
-      - "ApiGateway/**"
+      - "api-gateway/**"
     
   pull_request:
     branches: [ "main" ]
     paths:
-      - "ApiGateway/**"
+      - "api-gateway/**"
 jobs:
   build:
 

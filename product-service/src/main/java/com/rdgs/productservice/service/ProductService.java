@@ -5,9 +5,6 @@ import com.rdgs.productservice.dto.ProductCreationResponse;
 import com.rdgs.productservice.dto.ProductResponse;
 import com.rdgs.productservice.model.Product;
 import com.rdgs.productservice.repository.ProductRepository;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,16 +1,16 @@
 name: Workflow for order service
 env:
-  SERVICE: OrderService
+  SERVICE: order-service
 on:
   push:
     branches: [ "main" ]
     paths:
-      - "OrderService/**"
+      - "order-service/**"
     
   pull_request:
     branches: [ "main" ]
     paths:
-      - "OrderService/**"
+      - "order-service/**"
 jobs:
   build:
 

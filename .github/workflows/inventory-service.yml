@@ -1,16 +1,16 @@
 name: Workflow for inventory service
 env:
-  SERVICE: InventoryService
+  SERVICE: inventory-service
 on:
   push:
     branches: [ "main" ]
     paths:
-      - "InventoryService/**"
+      - "inventory-service/**"
     
   pull_request:
     branches: [ "main" ]
     paths:
-      - "InventoryService/**"
+      - "inventory-service/**"
 jobs:
   build:
 

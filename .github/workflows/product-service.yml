@@ -1,16 +1,16 @@
 name: Workflow for product service
 env:
-  SERVICE: ProductService
+  SERVICE: product-service
 on:
   push:
     branches: [ "main" ]
     paths:
-      - "ProductService/**"
+      - "product-service/**"
     
   pull_request:
     branches: [ "main" ]
     paths:
-      - "ProductService/**"
+      - "product-service/**"
 jobs:
   build:
 

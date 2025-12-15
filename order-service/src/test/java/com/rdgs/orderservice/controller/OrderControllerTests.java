@@ -12,6 +12,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.mysql.MySQLContainer;
 
 import static org.mockito.Mockito.when;
@@ -31,12 +32,17 @@ public class OrderControllerTests {
     @ServiceConnection
     private static final MySQLContainer mysqlContainer = new MySQLContainer("mysql:9.5.0");
 
+    @ServiceConnection
+    private static final KafkaContainer kafkaContainer = new KafkaContainer("apache/kafka:latest");
+
     @MockitoBean
     private FeignInventoryClient feignInventoryClient; // Mocking external API calls
 
     @BeforeAll
     static void start() {
         mysqlContainer.start();
+        kafkaContainer.start();
+
     }
 
     @BeforeEach

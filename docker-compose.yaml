@@ -1,4 +1,6 @@
 services:
+  # INFRASTRUCTURE
+
   db-product:
     image: mongo
     container_name: db-product
@@ -38,7 +40,7 @@ services:
     hostname: broker
     container_name: broker
     ports:
-      - 9092:9092
+      - "9092:9092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,CONTROLLER:PLAINTEXT
@@ -55,3 +57,62 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+
+  eureka-server:
+    image: rnk7/eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    image: rnk7/api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+
+  # SERVICES
+
+  inventory-service:
+    image: rnk7/inventory-service:latest
+    container_name: inventory-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db-inventory
+      - eureka-server
+      - api-gateway
+
+  notification-service:
+    image: rnk7/notification-service:latest
+    container_name: notification-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      - broker
+
+  order-service:
+    image: rnk7/order-service:latest
+    container_name: order-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db-order
+      - broker
+      - api-gateway
+      - eureka-server
+      - inventory-service
+
+  product-service:
+    image: rnk7/product-service:latest
+    container_name: product-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - db-product
+      - eureka-server
+      - api-gateway
+
+
+

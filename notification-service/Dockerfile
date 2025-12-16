@@ -8,4 +8,4 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 EXPOSE 8082
 COPY --from=build /app/notification-service/target/*.jar notification-service.jar
-ENTRYPOINT ["java", "-jar", "/notification-service.jar"]
+ENTRYPOINT ["java", "-jar", "notification-service.jar"]

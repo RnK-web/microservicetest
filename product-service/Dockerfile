@@ -8,4 +8,4 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 EXPOSE 8083
 COPY --from=build /app/product-service/target/*.jar product-service.jar
-ENTRYPOINT ["java", "-jar", "/product-service.jar"]
+ENTRYPOINT ["java", "-jar", "product-service.jar"]

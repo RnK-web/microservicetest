@@ -10,14 +10,14 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class ApiGatewayApplication {
 
-    @Value("${product.service.name}")
-    private String productServiceName;
+    @Value("${product.service.uri}")
+    private String productServiceUri;
 
-    @Value("${order.service.name}")
-    private String orderServiceName;
+    @Value("${order.service.uri}")
+    private String orderServiceUri;
 
-    @Value("${inventory.service.name}")
-    private String inventoryServiceName;
+    @Value("${inventory.service.uri}")
+    private String inventoryServiceUri;
 
     public static void main(String[] args) {
         SpringApplication.run(ApiGatewayApplication.class, args);
@@ -26,9 +26,9 @@ public class ApiGatewayApplication {
     @Bean
     public RouteLocator myRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route(orderServiceName, r -> r.path("/api/v1/orders/**").uri("lb://"+orderServiceName))
-                .route(productServiceName, r -> r.path("/api/v1/products/**").uri("lb://"+productServiceName))
-                .route(inventoryServiceName, r -> r.path("/api/v1/inventory/**").uri("lb://"+inventoryServiceName))
+                .route("order-service", r -> r.path("/api/v1/orders/**").uri(orderServiceUri))
+                .route("product-service", r -> r.path("/api/v1/products/**").uri(productServiceUri))
+                .route("inventory-service", r -> r.path("/api/v1/inventory/**").uri(inventoryServiceUri))
                 .build();
     }
 

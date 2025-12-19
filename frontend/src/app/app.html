@@ -1,0 +1,27 @@
+
+<nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold">B</div>
+        <span class="text-xl font-bold tracking-tight text-gray-800">Business<span class="text-indigo-600">Store</span></span>
+      </div>
+      <div class="relative">
+        <app-login></app-login>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-6xl mx-auto px-6 py-12">
+  <app-product-list></app-product-list>
+</div>
+
+<footer class="bg-white border-t border-gray-200 py-8">
+  <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 text-sm">
+    &copy; 2024 BusinessStore. Tous droits réservés.
+  </div>
+</footer>
+
+
+<router-outlet />

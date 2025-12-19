@@ -1,0 +1,63 @@
+name: Workflow for Frontend
+env:
+  SERVICE: frontend
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "frontend/**"
+    
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - "frontend/**"
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Clean and Install dependencies
+      working-directory: ./${{ env.SERVICE }}
+      run: npm ci
+
+    - name: Run Tests
+      working-directory: ./${{ env.SERVICE }}
+      run: npm test
+      
+    - name: Build Docker image
+      working-directory: ./${{ env.SERVICE }}
+      run: docker build . -t ${{ env.SERVICE }}:${{ github.sha }}
+
+    - name: Login to Docker Hub
+      run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+    - name : Tag Docker image
+      working-directory: ./${{ env.SERVICE }}
+      run: |
+        docker tag ${{ env.SERVICE }}:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/${{ env.SERVICE }}:${{ github.sha }}
+        docker tag ${{ env.SERVICE }}:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/${{ env.SERVICE }}:latest
+        
+    - name : Publish Docker image
+      working-directory: ./${{ env.SERVICE }}
+      run: |
+        docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.SERVICE }}:${{ github.sha }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.SERVICE }}:latest
+      
+     
+          
+    
